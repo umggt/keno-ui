@@ -10,11 +10,14 @@
 	<!-- build:css css/libs/bootstrap.min.css -->
 	<link rel="stylesheet" href="/node_modules/bootstrap/dist/css/bootstrap.css" />
 	<!-- endbuild -->
+	<!-- build:css css/libs/toastr.min.css -->
+	<link rel="stylesheet" href="/node_modules/toastr/build/toastr.css" />
+	<!-- endbuild -->
 	<link rel="stylesheet" href="/css/keno.css" />
 
 </head>
 
-<body>
+<body ng-cloak="">
 
 	<!-- Fixed navbar -->
 	<nav class="navbar navbar-inverse navbar-fixed-top">
@@ -29,37 +32,96 @@
 				</button>
 				<a class="navbar-brand" href="/">Keno</a>
 			</div>
-			<div id="navbar" class="navbar-collapse collapse">
+			<div id="navbar" class="navbar-collapse collapse"  ng-if="vm.perfil">
 				<ul class="nav navbar-nav navbar-right">
+					<li ng-if="vm.perfil"><a>Bienvenido <span ng-bind="vm.perfil.nickname"></span></a></li>
 					<li class="dropdown">
 						<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Opciones <span class="caret"></span></a>
 						<ul class="dropdown-menu">
+							<li><a href="#">Lista de jugadores</a></li>
+							<li role="separator" class="divider"></li>
 							<li class="dropdown-header">Acerca del proyecto</li>
 							<li><a href="#">Integrantes</a></li>
 							<li><a href="#">C&oacute;digo fuente</a></li>
+							<li role="separator" class="divider"></li>
+							<li class="dropdown-header">Operaciones</li>
+							<li><a href="#">Salir</a></li>
 						</ul>
 					</li>
-					<li><a href="#">Salir</a></li>
 				</ul>
 			</div>
 			<!--/.nav-collapse -->
 		</div>
 	</nav>
 
-	<div class="container">
+	<div class="container" ng-if="vm.perfil">
 		<div class="row">
-			<div class="col-md-7">
-
+			<div class="col-md-6">
+				
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h3 class="panel-title">Saldos</h3>
+					</div>
+					<div class="panel-body">
+					
+						<table class="table">
+							<tbody>
+								<tr>
+									<th>Inicial</th>
+									<td ng-bind="vm.perfil.saldoInicial | currency: 'Q'"></td>
+								</tr>
+								<tr>
+									<th>Actual</th>
+									<td ng-bind="vm.perfil.saldoActual | currency: 'Q'"></td>
+								</tr>
+							</tbody>
+						</table>
+					
+					</div>
+				</div>
+				
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h3 class="panel-title">Apuesta</h3>
+					</div>
+					<div class="panel-body">
+					
+						<form name="vm.formApostar" novalidate="novalidate">
+							<div class="form-group">
+								<label for="apuesta">Cantidad:</label>
+								<div class="input-group" ng-class="{ 'has-error': vm.formApostar.apuesta.$dirty && vm.formApostar.apuesta.$invalid }">
+									<div class="input-group-addon">Q</div>
+									<input type="number" class="form-control" id="apuesta" name="apuesta" ng-model="vm.apuesta" ng-min="1" ng-max="(vm.perfil.saldoActual > 40 ? 40 : vm.perfil.saldoActual)" required="required" ng-disabled="vm.jugando" />
+								</div>
+								<em ng-show="vm.formApostar.apuesta.$dirty && vm.formApostar.apuesta.$invalid" class="small text-danger">Debe ingresar una apuesta de Q1.00 a {{ (vm.perfil.saldoActual > 40 ? 40 : vm.perfil.saldoActual) | currency: 'Q' }}</em>
+							</div>
+							<div>
+								<button type="button" class="btn btn-primary pull-right" ng-click="vm.jugar()" ng-disabled="vm.seleccionados != 10 || vm.perfil.saldoActual < vm.apuesta || vm.formApostar.apuesta.$invalid || vm.jugando">{{ vm.jugando ? 'Jugando...' : 'Jugar' }}</button>
+							</div>
+						</form>
+					
+					</div>
+				</div>
+				
+				<div class="alert alert-warning" ng-show="vm.coincidencias != null">
+					<p>Usted acert&oacute; con <strong>{{ vm.coincidencias }}</strong> n&uacute;meros.</p>
+					<p ng-if="vm.ganancia > 0">&iexcl;Ha ganando <strong>{{ vm.ganancia | currency: 'Q' }}</strong>!</p>
+					<div class="clearfix">
+						<button type="button" class="btn btn-warning pull-right" ng-click="vm.nuevoJuego()">Nuevo juego</button>
+					</div>
+				</div>
+				
 			</div>
-			<div class="col-md-5">
+			<div class="col-md-6">
 
 				<div class="numeros well">
+					<p>Puede seleccionar un total de {{ 10 - vm.seleccionados }} numeros.</p>
 					<ul>
 						<li ng-repeat="numero in vm.numeros" ng-class="{ 'new-line': numero.valor == 0 }">
-							<button type="button" ng-bind="numero.valor" class="btn" ng-class="vm.cssClass(numero)" ng-click="vm.seleccionar(numero)"
-							ng-disabled="vm.desactivar(numero)" />
+							<button type="button" ng-bind="numero.valor" class="btn" ng-class="vm.cssClass(numero)" ng-click="vm.seleccionar(numero)" ng-disabled="vm.desactivar(numero)" />
 						</li>
 					</ul>
+					
 				</div>
 
 			</div>
@@ -68,24 +130,33 @@
 	</div>
 
 	<script type="text/ng-template" id="Ingresar.html">
-        <div class="modal-header">
-            <h3 class="modal-title">Ingresar</h3>
-        </div>
-        <div class="modal-body">
-            <form>
+		<form name="vm.ingresarForm" ng-submit="vm.aceptar()" novalidate="novalidate">
+			<div class="modal-header bg-primary">
+				<h3 class="modal-title">Ingresar</h3>
+			</div>
+			<div class="modal-body">
 				<div class="form-group">
 					<label for="nickname">Nickname:</label>
-					<input type="text" id="nickname" class="form-control" placeholder="nickname" />
+					<div class="input-group">
+						<input type="text" id="nickname" class="form-control" placeholder="nickname" ng-model="vm.nickname" ng-disabled="vm.trabajando" />
+						<span class="input-group-btn">
+							<button class="btn btn-warning" type="button" ng-disabled="vm.desactivarIdentificar()" ng-click="vm.identificar()" required>Identificarme</button>
+						</span>
+					</div>
 				</div>
-				<div class="form-group">
-					<label for="password">Nickname:</label>
-					<input type="password" id="password" class="form-control" placeholder="nickname" />
+				<div class="form-group" ng-if="!vm.desactivarSaldoInicial()" ng-class="{'has-error': vm.ingresarForm.saldoInicial.$dirty && vm.ingresarForm.saldoInicial.$invalid }">
+					<label for="saldo-inicial">Saldo Inicial</label>
+					<div class="input-group">
+						<div class="input-group-addon">Q</div>
+						<input type="number" id="saldo-inicial" name="saldoInicial" class="form-control" placeholder="Saldo Inicial" ng-model="vm.saldoInicial" ng-disabled="vm.desactivarSaldoInicial()" ng-min="100" required="required" />
+					</div>
+					<em class="small text-danger" ng-show="vm.ingresarForm.saldoInicial.$dirty && vm.ingresarForm.saldoInicial.$invalid">Debe ingresar un saldo inicial mayor o igual a Q100.00</em>
 				</div>
-			</form>
-        </div>
-        <div class="modal-footer">
-            <button class="btn btn-primary" type="button" ng-click="vm.aceptar()">Aceptar</button>
-        </div>
+			</div>
+			<div class="modal-footer bg-gray">
+				<button class="btn btn-primary" type="sumbit" ng-disabled="vm.desactivarAceptar() || vm.ingresarForm.$invalid" ng-if="!vm.desactivarSaldoInicial()">Aceptar</button>
+			</div>
+		</form>
     </script>
 
 	<!-- build:js js/libs/angular.min.js -->
@@ -99,6 +170,9 @@
 	<!-- endbuild -->
 	<!-- build:js js/libs/ui-bootstrap-tpls.min.js -->
 	<script src="/node_modules/angular-ui-bootstrap/ui-bootstrap-tpls.js"></script>
+	<!-- endbuild -->
+	<!-- build:js js/libs/toastr.min.js -->
+	<script src="/node_modules/toastr/build/toastr.min.js"></script>
 	<!-- endbuild -->
 	
 	<script src="/index.js"></script>

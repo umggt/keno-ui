@@ -78,9 +78,9 @@ app.post('/servidor.php', function (req, res) {
     res.status(400).json({ resultado: false, mensaje: 'unknown operation' });
 });
 
-app.use('/node_modules', express.static(__dirname + '/../node_modules'));
+app.use('/node_modules', express.static(__dirname + '/node_modules'));
 
-app.use(express.static(__dirname));
+app.use(express.static(__dirname + '/dist'));
 
 var server = app.listen(3000, function () {
   var host = server.address().address;

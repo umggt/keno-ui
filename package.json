@@ -1,0 +1,31 @@
+{
+  "name": "keno-ui",
+  "version": "1.0.0",
+  "description": "Interfaz grafica para el juego de Keno hecha en JavaScript y HTML5 sobre AngularJS.",
+  "main": "src\\index.html",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/umggt/keno-ui.git"
+  },
+  "keywords": [
+    "keno"
+  ],
+  "author": "Miguel Roman <miguelerm@gmail.com>",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/umggt/keno-ui/issues"
+  },
+  "homepage": "https://github.com/umggt/keno-ui#readme",
+  "dependencies": {
+    "angular": "^1.4.7",
+    "angular-ui-bootstrap": "^0.14.3",
+    "bootstrap": "^3.3.5",
+    "jquery": "^2.1.4"
+  },
+  "devDependencies": {
+    "express": "^4.13.3"
+  }
+}

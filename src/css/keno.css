@@ -1,0 +1,29 @@
+body {
+  padding-top: 70px;
+  padding-bottom: 30px;
+}
+
+.numeros ul {
+	padding: 0;
+}
+
+.numeros li {
+	list-style: none;
+	display: inline-block;
+	padding: 2px;
+}
+
+.numeros li.new-line {
+	display: block;
+	padding: 0;
+	visibility: hidden;
+}
+
+.numeros li.new-line * {
+	display: none;
+}
+
+.numeros .btn {
+	width: 42px;
+}
+

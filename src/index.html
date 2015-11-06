@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html ng-app="keno" ng-controller="MainController as vm">
+
+<head>
+	<title>Juego de Keno</title>
+
+	<!-- build:css css/libs/angular-csp.min.css -->
+	<link rel="stylesheet" href="/node_modules/angular/angular-csp.css" />
+	<!-- endbuild -->
+	<!-- build:css css/libs/bootstrap.min.css -->
+	<link rel="stylesheet" href="/node_modules/bootstrap/dist/css/bootstrap.css" />
+	<!-- endbuild -->
+	<link rel="stylesheet" href="/css/keno.css" />
+
+</head>
+
+<body>
+
+	<!-- Fixed navbar -->
+	<nav class="navbar navbar-inverse navbar-fixed-top">
+		<div class="container">
+			<div class="navbar-header">
+				<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false"
+				aria-controls="navbar">
+					<span class="sr-only">Toggle navigation</span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+				</button>
+				<a class="navbar-brand" href="/">Keno</a>
+			</div>
+			<div id="navbar" class="navbar-collapse collapse">
+				<ul class="nav navbar-nav navbar-right">
+					<li class="dropdown">
+						<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Opciones <span class="caret"></span></a>
+						<ul class="dropdown-menu">
+							<li class="dropdown-header">Acerca del proyecto</li>
+							<li><a href="#">Integrantes</a></li>
+							<li><a href="#">C&oacute;digo fuente</a></li>
+						</ul>
+					</li>
+					<li><a href="#">Salir</a></li>
+				</ul>
+			</div>
+			<!--/.nav-collapse -->
+		</div>
+	</nav>
+
+	<div class="container">
+		<div class="row">
+			<div class="col-md-7">
+
+			</div>
+			<div class="col-md-5">
+
+				<div class="numeros well">
+					<ul>
+						<li ng-repeat="numero in vm.numeros" ng-class="{ 'new-line': numero.valor == 0 }">
+							<button type="button" ng-bind="numero.valor" class="btn" ng-class="vm.cssClass(numero)" ng-click="vm.seleccionar(numero)"
+							ng-disabled="vm.desactivar(numero)" />
+						</li>
+					</ul>
+				</div>
+
+			</div>
+
+		</div>
+	</div>
+
+	<script type="text/ng-template" id="Ingresar.html">
+        <div class="modal-header">
+            <h3 class="modal-title">Ingresar</h3>
+        </div>
+        <div class="modal-body">
+            <form>
+				<div class="form-group">
+					<label for="nickname">Nickname:</label>
+					<input type="text" id="nickname" class="form-control" placeholder="nickname" />
+				</div>
+				<div class="form-group">
+					<label for="password">Nickname:</label>
+					<input type="password" id="password" class="form-control" placeholder="nickname" />
+				</div>
+			</form>
+        </div>
+        <div class="modal-footer">
+            <button class="btn btn-primary" type="button" ng-click="vm.aceptar()">Aceptar</button>
+        </div>
+    </script>
+
+	<!-- build:js js/libs/angular.min.js -->
+	<script src="/node_modules/angular/angular.js"></script>
+	<!-- endbuild -->
+	<!-- build:js js/libs/jquery.min.js -->
+	<script src="/node_modules/jquery/dist/jquery.js"></script>
+	<!-- endbuild -->
+	<!-- build:js js/libs/bootstrap.min.js -->
+	<script src="/node_modules/bootstrap/dist/js/bootstrap.js"></script>
+	<!-- endbuild -->
+	<!-- build:js js/libs/ui-bootstrap-tpls.min.js -->
+	<script src="/node_modules/angular-ui-bootstrap/ui-bootstrap-tpls.js"></script>
+	<!-- endbuild -->
+	
+	<script src="/index.js"></script>
+
+</body>
+
+</html>

@@ -2,7 +2,7 @@
     'use strict';
 
     angular
-        .module('keno', ['ui.bootstrap'])
+        .module('keno', ['ui.bootstrap', 'hljs'])
         .constant('config', {
             servidor: '/servidor.php',
             operaciones: {
@@ -12,6 +12,7 @@
                 'listar': 'listar'
             }
         })
+        .config(configureHighlight)
         .constant('toastr', window.toastr)
         .factory('servidor', Servidor)
         .controller('MainController', MainController)
@@ -420,6 +421,11 @@
         }
     }
 
-
+    function configureHighlight(hljsServiceProvider) {
+        hljsServiceProvider.setOptions({
+            // replace tab with 3 spaces
+            tabReplace: '   '
+        });
+    }
 
 })();

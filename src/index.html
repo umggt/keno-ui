@@ -10,6 +10,9 @@
 	<!-- build:css css/libs/bootstrap.min.css -->
 	<link rel="stylesheet" href="/node_modules/bootstrap/dist/css/bootstrap.css" />
 	<!-- endbuild -->
+	<!-- build:css css/libs/highlight.css -->
+	<link rel="stylesheet" href="/node_modules/highlight.js/styles/github.css" />
+	<!-- endbuild -->
 	<!-- build:css css/libs/toastr.min.css -->
 	<link rel="stylesheet" href="/node_modules/toastr/build/toastr.css" />
 	<!-- endbuild -->
@@ -283,16 +286,16 @@
 		<div class="modal-body">
 			<uib-tabset>
 				<uib-tab heading="servidor.php">
-					<pre>{{ vm.servidorPhp }}</pre>
+					<div hljs hljs-source="vm.servidorPhp" hljs-language="php"></div>
 				</uib-tab>
 				<uib-tab heading="index.js">
-					<pre>{{ vm.indexJs }}</pre>
+					<div hljs hljs-source="vm.indexJs" hljs-language="js"></div>
 				</uib-tab>
 				<uib-tab heading="index.html">
-					<pre>{{ vm.indexHtml }}</pre>
+					<div hljs hljs-source="vm.indexHtml" hljs-language="html"></div>
 				</uib-tab>
 				<uib-tab heading="keno.css">
-					<pre>{{ vm.kenoCss }}</pre>
+					<div hljs hljs-source="vm.kenoCss" hljs-language="css"></div>
 				</uib-tab>
 			</uib-tabset>
 		</div>
@@ -315,6 +318,10 @@
 	<!-- endbuild -->
 	<!-- build:js js/libs/toastr.min.js -->
 	<script src="/node_modules/toastr/build/toastr.min.js"></script>
+	<!-- endbuild -->
+	<!-- build:js js/libs/angular-highlight.min.js -->
+	<script src="/src/js/libs/highlight.pack.js"></script>
+	<script src="/node_modules/angular-highlightjs/angular-highlightjs.min.js"></script>
 	<!-- endbuild -->
 	
 	<script src="js/index.js"></script>

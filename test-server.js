@@ -23,15 +23,12 @@ app.post('/servidor.php', function (req, res) {
             res.json({
                 resultado: true,
                 nickname: 'mike',
-                saldoInicial: 100.00,
-                saldoActual: 500.00
+                saldoInicial: '100.00',
+                saldoActual: '500.00'
             });
         } else {
             res.json({
-                resultado: false,
-                nickname: data.nickname,
-                saldoInicial: 0,
-                saldoActual: 0
+                resultado: false
             });
         }
         
@@ -72,6 +69,15 @@ app.post('/servidor.php', function (req, res) {
                 resultado: false
             });
         }
+        return;
+    }
+    
+    if (data.operacion == 'listar') {
+        res.json([
+            { nickname: 'mike', saldoInicial: 100, saldoActual: 200 },
+            { nickname: 'john', saldoInicial: 500, saldoActual: 100 },
+            { nickname: 'juan', saldoInicial: 400, saldoActual: 1000 }
+        ]);
         return;
     }
     

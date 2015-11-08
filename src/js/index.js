@@ -8,32 +8,50 @@
             operaciones: {
                 'obtener-perfil': 'obtener-perfil',
                 'registrar-perfil': 'registrar-perfil',
-                'jugar': 'jugar'
+                'jugar': 'jugar',
+                'listar': 'listar'
             }
         })
         .constant('toastr', window.toastr)
         .factory('servidor', Servidor)
         .controller('MainController', MainController)
-        .controller('IngresarController', IngresarController);
+        .controller('ListaController', ListaController)
+        .controller('IngresarController', IngresarController)
+        .controller('IntegrantesController', IntegrantesController);
 
     function MainController($log, $http, $uibModal, $timeout, toastr, servidor) {
         var vm = this;
 
-        vm.jugando = false;
-        vm.seleccionados = 0;
         vm.perfil = null;
         vm.numeros = [];
+        vm.jugando = false;
         vm.apuesta = null;
-        vm.cssClass = cssClass;
-        vm.seleccionar = seleccionar;
-        vm.desactivar = desactivar;
-        vm.jugar = jugar;
-        vm.nuevoJuego = nuevoJuego;
-        vm.coincidencias = null;
         vm.ganancia = null;
-
+        vm.seleccionados = 0;
+        vm.coincidencias = null;
+        
+        vm.jugar = jugar;
+        vm.salir = salir;
+        vm.cssClass = cssClass;
+        vm.desactivar = desactivar;
+        vm.nuevoJuego = nuevoJuego;
+        vm.seleccionar = seleccionar;
+        vm.mostrarLista = mostrarLista;
+        vm.mostrarIntegrantes = mostrarIntegrantes;
+        
         initialize();
 
+        function salir() {
+            vm.jugando = false;
+            vm.seleccionados = 0;
+            vm.perfil = null;
+            vm.numeros = [];
+            vm.apuesta = null;
+            vm.coincidencias = null;
+            vm.ganancia = null;
+            initialize();
+        }
+        
         function initialize() {
             abrirModalIngresar().then(function (perfil) {
                 vm.perfil = perfil;
@@ -41,6 +59,24 @@
                 $timeout(function () {
                     $("#apuesta").focus();
                 }, 300);
+            });
+        }
+        
+        function mostrarLista() {
+            $uibModal.open({
+                templateUrl: 'Lista.html',
+                controller: 'ListaController',
+                controllerAs: 'vm',
+                bindToController: true
+            });
+        }
+        
+        function mostrarIntegrantes() {
+            $uibModal.open({
+                templateUrl: 'Integrantes.html',
+                controller: 'IntegrantesController',
+                controllerAs: 'vm',
+                bindToController: true
             });
         }
 
@@ -249,17 +285,76 @@
             return vm.saldoInicial <= 0 || vm.trabajando;
         }
     }
+    
+    function ListaController($log, $uibModalInstance, toastr, servidor) {
+        
+        var vm = this;
+        vm.registros = [];
+        
+        vm.cerrar = cerrar;
+        
+        initialize();
+        
+        function initialize() {
+            servidor.listar().success(cargarListado).error(errorAlCargarListado);
+        }
+        
+        function cargarListado(registros) {
+            vm.registros = registros;
+        }
+        
+        function cerrar() {
+            $uibModalInstance.dismiss();
+        }
+        
+        function errorAlCargarListado(errorData) {
+            $log.error(errorData);
+            toastr.error('Ocurrió un error al tratar de registrar el perfil' + (errorData.mensaje ? ' ' + errorData.mensaje : ''), 'Error');
+        }
+    }
+    
+    function IntegrantesController($uibModalInstance) {
+        
+        var vm = this;
+        
+        // ordenados por carnet.
+        // si las tildes no aparecen bien en el html:
+        // á = \u00e1
+        // é = \u00e9
+        // í = \u00ed
+        // ó = \u00f3
+        // ú = \u00fa
+        // ñ = \u00f1
+        // por ejemplo para escribir Román = Rom\u00e1n
+        vm.integrantes = [
+            { nombre: 'Jorge David Vel\u00e1quez Sim', carnet: '090-93-33335' },
+            { nombre: 'Miguel Eduardo Rom\u00e1n Mart\u00ednez', carnet: '090-03-4873' },
+            { nombre: 'Jos\u00e9 Eduardo Cabrera Ipi\u00f1a', carnet: '' },
+            { nombre: 'Mario Coronado', carnet: '' }
+        ];
+        
+        vm.cerrar = cerrar;
+        
+        function cerrar() {
+            $uibModalInstance.dismiss();
+        }
+    }
 
     function Servidor($http, config) {
         var operaciones = config.operaciones;
         var service = {
             obtenerPerfil: obtenerPerfil,
             registrarPerfil: registrarPerfil,
-            jugar: jugar
+            jugar: jugar,
+            listar: listar
         };
 
         return service;
 
+        function listar() {
+            return postData(config.servidor, { operacion: operaciones['listar'] });
+        }
+        
         function jugar(nickname, apuesta, numeros) {
             return postData(config.servidor, { operacion: operaciones['jugar'], nickname: nickname, apuesta: apuesta, numeros: numeros });
         }

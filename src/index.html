@@ -38,14 +38,14 @@
 					<li class="dropdown">
 						<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Opciones <span class="caret"></span></a>
 						<ul class="dropdown-menu">
-							<li><a href="#">Lista de jugadores</a></li>
+							<li><a href="#" ng-click="vm.mostrarLista()">Lista de jugadores</a></li>
 							<li role="separator" class="divider"></li>
 							<li class="dropdown-header">Acerca del proyecto</li>
-							<li><a href="#">Integrantes</a></li>
+							<li><a href="#" ng-click="vm.mostrarIntegrantes()">Integrantes</a></li>
 							<li><a href="#">C&oacute;digo fuente</a></li>
 							<li role="separator" class="divider"></li>
 							<li class="dropdown-header">Operaciones</li>
-							<li><a href="#">Salir</a></li>
+							<li><a href="#" ng-click="vm.salir()">Salir</a></li>
 						</ul>
 					</li>
 				</ul>
@@ -127,6 +127,67 @@
 			</div>
 
 		</div>
+		<div class="row">
+			<div class="col-md-6 col-md-offset-6">
+				
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h3 class="panel-title">Reglas para apostar</h3>
+					</div>
+					<div class="panel-body">
+					
+						<table class="table">
+							<thead>
+								<tr>
+									<th>
+										Aciertos
+									</th>
+									<th>
+										Pago
+									</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr>
+									<td>3</th>
+									<td>3 * Apuesta</td>
+								</tr>
+								<tr>
+									<td>4</th>
+									<td>3 * Apuesta</td>
+								</tr>
+								<tr>
+									<td>5</th>
+									<td>5 * Apuesta</td>
+								</tr>
+								<tr>
+									<td>6</th>
+									<td>6 * Apuesta</td>
+								</tr>
+								<tr>
+									<td>7</th>
+									<td>70 * Apuesta</td>
+								</tr>
+								<tr>
+									<td>8</th>
+									<td>80 * Apuesta</td>
+								</tr>
+								<tr>
+									<td>9</th>
+									<td>90 * Apuesta</td>
+								</tr>
+								<tr>
+									<td>10</th>
+									<td>1000 * Apuesta</td>
+								</tr>
+							</tbody>
+						</table>
+					
+					</div>
+				</div>
+				
+			</div>
+		</div>
 	</div>
 
 	<script type="text/ng-template" id="Ingresar.html">
@@ -157,6 +218,62 @@
 				<button class="btn btn-primary" type="sumbit" ng-disabled="vm.desactivarAceptar() || vm.ingresarForm.$invalid" ng-if="!vm.desactivarSaldoInicial()">Aceptar</button>
 			</div>
 		</form>
+    </script>
+	
+	<script type="text/ng-template" id="Lista.html">
+		<div class="modal-header bg-primary">
+			<h3 class="modal-title">Listado de Registros</h3>
+		</div>
+		<div class="modal-body">
+			<table class="table table-striped table-condensed">
+				<thead>
+					<tr>
+						<th>&nbsp;</th>
+						<th>Nickname</th>
+						<th class="text-right">Saldo Inicial</th>
+						<th class="text-right">Saldo Actual</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr ng-repeat="registro in vm.registros">
+						<td>{{ $index + 1 }}</td>
+						<td>{{ registro.nickname }}</td>
+						<td class="text-right">{{ registro.saldoInicial | currency: 'Q' }}</td>
+						<td class="text-right">{{ registro.saldoActual | currency: 'Q' }}</td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+		<div class="modal-footer bg-gray">
+			<button class="btn btn-default" type="button" ng-click="vm.cerrar()">Cerrar</button>
+		</div>
+    </script>
+	
+	<script type="text/ng-template" id="Integrantes.html">
+		<div class="modal-header bg-primary">
+			<h3 class="modal-title">Integrantes del grupo</h3>
+		</div>
+		<div class="modal-body">
+			<table class="table table-striped table-condensed">
+				<thead>
+					<tr>
+						<th>&nbsp;</th>
+						<th>Nombre</th>
+						<th>Carnet</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr ng-repeat="integrante in vm.integrantes">
+						<td>{{ $index + 1 }}</td>
+						<td>{{ integrante.nombre }}</td>
+						<td>{{ integrante.carnet }}</td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+		<div class="modal-footer bg-gray">
+			<button class="btn btn-default" type="button" ng-click="vm.cerrar()">Cerrar</button>
+		</div>
     </script>
 
 	<!-- build:js /js/libs/angular.min.js -->

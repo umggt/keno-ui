@@ -42,7 +42,7 @@
 							<li role="separator" class="divider"></li>
 							<li class="dropdown-header">Acerca del proyecto</li>
 							<li><a href="#" ng-click="vm.mostrarIntegrantes()">Integrantes</a></li>
-							<li><a href="#">C&oacute;digo fuente</a></li>
+							<li><a href="#" ng-click="vm.mostrarCodigoFuente()">C&oacute;digo fuente</a></li>
 							<li role="separator" class="divider"></li>
 							<li class="dropdown-header">Operaciones</li>
 							<li><a href="#" ng-click="vm.salir()">Salir</a></li>
@@ -270,6 +270,31 @@
 					</tr>
 				</tbody>
 			</table>
+		</div>
+		<div class="modal-footer bg-gray">
+			<button class="btn btn-default" type="button" ng-click="vm.cerrar()">Cerrar</button>
+		</div>
+    </script>
+	
+	<script type="text/ng-template" id="Fuentes.html">
+		<div class="modal-header bg-primary">
+			<h3 class="modal-title">C&oacute;digo Fuente</h3>
+		</div>
+		<div class="modal-body">
+			<uib-tabset>
+				<uib-tab heading="servidor.php">
+					<pre>{{ vm.servidorPhp }}</pre>
+				</uib-tab>
+				<uib-tab heading="index.js">
+					<pre>{{ vm.indexJs }}</pre>
+				</uib-tab>
+				<uib-tab heading="index.html">
+					<pre>{{ vm.indexHtml }}</pre>
+				</uib-tab>
+				<uib-tab heading="keno.css">
+					<pre>{{ vm.kenoCss }}</pre>
+				</uib-tab>
+			</uib-tabset>
 		</div>
 		<div class="modal-footer bg-gray">
 			<button class="btn btn-default" type="button" ng-click="vm.cerrar()">Cerrar</button>

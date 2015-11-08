@@ -16,6 +16,7 @@
         .factory('servidor', Servidor)
         .controller('MainController', MainController)
         .controller('ListaController', ListaController)
+        .controller('FuentesController', FuentesController)
         .controller('IngresarController', IngresarController)
         .controller('IntegrantesController', IntegrantesController);
 
@@ -38,6 +39,7 @@
         vm.seleccionar = seleccionar;
         vm.mostrarLista = mostrarLista;
         vm.mostrarIntegrantes = mostrarIntegrantes;
+        vm.mostrarCodigoFuente = mostrarCodigoFuente;
         
         initialize();
 
@@ -77,6 +79,16 @@
                 controller: 'IntegrantesController',
                 controllerAs: 'vm',
                 bindToController: true
+            });
+        }
+        
+        function mostrarCodigoFuente() {
+            $uibModal.open({
+                templateUrl: 'Fuentes.html',
+                controller: 'FuentesController',
+                controllerAs: 'vm',
+                bindToController: true,
+                size: 'lg'
             });
         }
 
@@ -329,11 +341,36 @@
         vm.integrantes = [
             { nombre: 'Jorge David Vel\u00e1quez Sim', carnet: '090-93-33335' },
             { nombre: 'Miguel Eduardo Rom\u00e1n Mart\u00ednez', carnet: '090-03-4873' },
-            { nombre: 'Jos\u00e9 Eduardo Cabrera Ipi\u00f1a', carnet: '' },
+            { nombre: 'Jos\u00e9 Eduardo Cabrera Ipi\u00f1a', carnet: '090-10-2854' },
             { nombre: 'Mario Coronado', carnet: '' }
         ];
         
         vm.cerrar = cerrar;
+        
+        function cerrar() {
+            $uibModalInstance.dismiss();
+        }
+    }
+    
+    function FuentesController($http, $uibModalInstance) {
+        
+        var vm = this;
+        
+        vm.servidorPhp = null;
+        vm.indexHtml = null;
+        vm.indexJs = null;
+        vm.kenoCss = null;
+        
+        vm.cerrar = cerrar;
+        
+        initialize();
+        
+        function initialize() {
+            $http.get('index.html').success(function (html) { vm.indexHtml = html; });
+            $http.get('js/index.js').success(function (js) { vm.indexJs = js; });
+            $http.get('css/keno.css').success(function (css) { vm.kenoCss = css; });
+            $http.get('servidor.php.txt').success(function (php) { vm.servidorPhp = php; });
+        }
         
         function cerrar() {
             $uibModalInstance.dismiss();

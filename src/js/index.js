@@ -342,8 +342,8 @@
         vm.integrantes = [
             { nombre: 'Jorge David Vel\u00e1quez Sim', carnet: '090-93-33335' },
             { nombre: 'Miguel Eduardo Rom\u00e1n Mart\u00ednez', carnet: '090-03-4873' },
-            { nombre: 'Jos\u00e9 Eduardo Cabrera Ipi\u00f1a', carnet: '090-10-2854' },
-            { nombre: 'Mario Coronado', carnet: '' }
+            { nombre: 'Mario Francisco Coronado Salazar', carnet: '090-09-8003' },
+            { nombre: 'Jos\u00e9 Eduardo Cabrera Ipi\u00f1a', carnet: '090-10-2854' }
         ];
         
         vm.cerrar = cerrar;
